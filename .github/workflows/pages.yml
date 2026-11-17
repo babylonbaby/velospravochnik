@@ -18,8 +18,18 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - name: Extract site
-        run: unzip -q site.zip -d public
+      - name: Extract site and add interactive map
+        run: |
+          unzip -q site.zip -d public
+          cp -r vendor public/
+          cp route-map.js public/
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('public/index.html')
+          html = path.read_text()
+          assets = '<link rel="stylesheet" href="vendor/leaflet.css"><script src="vendor/leaflet.js"></script><script src="route-map.js"></script>'
+          path.write_text(html.replace('</html>', assets + '</html>'))
+          PY
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
