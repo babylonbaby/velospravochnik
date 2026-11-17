@@ -1,7 +1,9 @@
 (() => {
   if (!window.L) return;
+  const notes=document.querySelector('.notes');
+  if(notes) notes.innerHTML=notes.innerHTML.replace('схема показывает его геометрию без дорожной подложки', 'карта показывает выбранный маршрут поверх OpenStreetMap').replace('<b>Схема</b> показывает упрощённую геометрию без дорожной подложки', '<b>Общая схема</b> показывает упрощённую геометрию без дорожной подложки');
   const style=document.createElement('style');
-  style.textContent=`.route-map-wrap{margin-top:16px;background:#f1f4ec;border:1px solid #d9dfd4;border-radius:8px;overflow:hidden}.route-map{height:390px;min-height:260px;z-index:0}.route-map-tools{display:flex;gap:7px;flex-wrap:wrap;padding:9px}.route-map-tools button{font-size:13px;padding:7px 9px}.route-map-status{padding:0 10px 8px;font-size:12px;color:#586b63}.route-map-wrap:fullscreen{background:white;display:flex;flex-direction:column}.route-map-wrap:fullscreen .route-map{flex:1;height:auto}.leaflet-container{font:13px system-ui,Arial}.leaflet-container svg{background:transparent;border-radius:0}.leaflet-container a{color:#176d56}.route-map-label{background:white;border:2px solid var(--marker);border-radius:20px;color:#172f2c;font:bold 12px system-ui;padding:3px 8px;white-space:nowrap;width:max-content!important;height:auto!important}.route-map-legend{font-size:12px;padding:0 10px 8px}@media(max-width:600px){.route-map{height:340px}.card{padding:15px}}`;
+  style.textContent=`.route-map-wrap{margin-top:16px;background:#f1f4ec;border:1px solid #d9dfd4;border-radius:8px;overflow:hidden}.route-map{height:390px;min-height:260px;z-index:0}.route-map-tools{display:flex;gap:7px;flex-wrap:wrap;padding:9px}.route-map-tools button{font-size:13px;padding:7px 9px}.route-map-status{padding:0 10px 8px;font-size:12px;color:#586b63}.route-map-wrap:fullscreen{background:white;display:flex;flex-direction:column}.route-map-wrap:fullscreen .route-map{flex:1;height:auto}.leaflet-container{font:13px system-ui,Arial}.leaflet-container svg{background:transparent;border-radius:0}.leaflet-container a{color:#176d56}.route-map-label{background:white;border:0;border-radius:20px;color:#172f2c;font:bold 12px system-ui;padding:3px 8px;white-space:nowrap;width:max-content!important;height:auto!important}.route-map-legend{font-size:12px;padding:0 10px 8px}@media(max-width:600px){.route-map{height:340px}.card{padding:15px}}`;
   document.head.append(style);
   const originalCard=card;
   let map=null,controller=null,request=0;
@@ -25,7 +27,7 @@
       if(line.getBounds().isValid())m.fitBounds(line.getBounds(),{padding:[30,30],maxZoom:15});
     };
     draw(r.line);
-    const marker=(p,label,color)=>L.marker(p,{icon:L.divIcon({className:'route-map-label',html:`<span style="--marker:${color}">${label}</span>`,iconAnchor:[12,12]}),title:label}).addTo(m).bindPopup(label);
+    const marker=(p,label,color)=>L.marker(p,{icon:L.divIcon({className:'route-map-label',html:`<span style="border-left:5px solid ${color};padding-left:5px">${label}</span>`,iconAnchor:[12,12]}),title:label}).addTo(m).bindPopup(label);
     marker(r.start,'Старт','#176d56');marker(r.end,'Финиш','#d87928');
     wrap.querySelector('[data-fit]').onclick=()=>line&&m.fitBounds(line.getBounds(),{padding:[30,30],maxZoom:15});
     const full=wrap.querySelector('[data-full]');
