@@ -1,2 +1,2 @@
-# velospravochnik
+# velospravochnik.ru
 Справочник веломаршрутов 2006–2026: поиск, направления и GPX.
